@@ -9,6 +9,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     // final email = TextFormField(
@@ -37,8 +38,8 @@ class _LoginPageState extends State<LoginPage> {
 
     final password = TextFormField(
       autofocus: false,
-      initialValue: ' ',
       obscureText: true,
+      controller: passwordController,
       decoration: InputDecoration(
         hintText: 'Password',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -57,9 +58,38 @@ class _LoginPageState extends State<LoginPage> {
           height: 42.0,
           onPressed: () {
             String usernameValue = usernameController.text;
-            print(usernameValue);
-            Navigator.of(context)
-                .pushNamed(HomePage.tag, arguments: usernameValue);
+            String passwordValue = passwordController.text;
+            if (usernameValue == 'nasywa' && passwordValue == '1234') {
+              Navigator.of(context)
+                  .pushNamed(HomePage.tag, arguments: usernameValue);
+            } else {
+              String alertTitle = '-';
+              String alertContent = '-';
+              if (usernameValue != 'nasywa') {
+                alertTitle = 'Incorrect Username';
+                alertContent = 'Please enter the correct username.';
+              } else if (passwordValue != '1234') {
+                alertTitle = 'Incorrect Password';
+                alertContent = 'Please enter the correct password.';
+              }
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(alertTitle),
+                    content: Text(alertContent),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
           },
           color: Colors.lightBlueAccent,
           child: Text('Log In', style: TextStyle(color: Colors.white)),
